@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
     // console.log("--------------------")
     socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
         
-        // console.log("Room id and username "+roomId,username+" is here ")
+        console.log("Room id and username "+roomId,username+" is here ")
         // console.log("--------------------")
         userSocketMap[socket.id] = username;
         // console.log("L34 usersocketmap "+ JSON.stringify(userSocketMap)); storing in this formate 
@@ -53,14 +53,14 @@ io.on('connection', (socket) => {
         });
     });
     socket.on(ACTIONS.CODE_CHANGE,(text)=>{
-        console.log(text);
+        // console.log(text);
         socket.broadcast.emit(ACTIONS.CODE_CHANGE,(text));
     })
 
 
     //disconnecting process
     socket.on('disconnecting', () => {
-
+        console.log(userSocketMap[socket.id]+" is gone now")
         const rooms = [...socket.rooms];
         // console.log("L62 All rooms list "+ rooms);
         rooms.forEach((roomId) => {

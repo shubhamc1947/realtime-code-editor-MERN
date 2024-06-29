@@ -12,7 +12,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Auth compo={Home} />} />
-          <Route path="/editor/:roomid" element={<Auth compo={Editor} />} />
+          <Route path="/editor/:roomId" element={<Auth compo={Editor} />} />
           <Route path="/login" element={<Auth compo={Login} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

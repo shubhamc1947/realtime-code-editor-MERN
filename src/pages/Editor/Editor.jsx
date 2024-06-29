@@ -14,7 +14,7 @@ const Editor = () => {
   const codeRef = useRef(null);
 
   const { roomId } = useParams();
-
+  console.log(roomId)
   const reactNavigator = useNavigate();
 
   const location = useLocation();

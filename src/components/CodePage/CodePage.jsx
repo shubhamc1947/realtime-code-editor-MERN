@@ -15,7 +15,7 @@ const CodePage = ({ socketRef, roomId }) => {
 
   const handleTextValue = (e) => {
     setText(e.target.value);
-    console.log(e.target.value)
+    // console.log(e.target.value)
     socketRef.current.emit(ACTIONS.CODE_CHANGE, e.target.value);
   };
   return (
