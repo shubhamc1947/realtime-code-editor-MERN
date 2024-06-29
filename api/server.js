@@ -57,10 +57,17 @@ io.on('connection', (socket) => {
         socket.broadcast.emit(ACTIONS.CODE_CHANGE,(text));
     })
 
+    socket.on(ACTIONS.SYNC_CODE, ({ code , socketId }) => {
+        const currcode=code;
+        console.log("L61 code is here"+code)
+        io.to(socketId).emit(ACTIONS.CODE_CHANGE, currcode );
+    });
+    
+
 
     //disconnecting process
     socket.on('disconnecting', () => {
-        console.log(userSocketMap[socket.id]+" is gone now")
+        // console.log(userSocketMap[socket.id]+" is gone now")
         const rooms = [...socket.rooms];
         // console.log("L62 All rooms list "+ rooms);
         rooms.forEach((roomId) => {

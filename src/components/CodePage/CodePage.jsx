@@ -2,22 +2,31 @@ import React, { useState, useEffect } from "react";
 import "./codepage.scss";
 import ACTIONS from "../../Actions";
 
-const CodePage = ({ socketRef, roomId }) => {
+const CodePage = ({ socketRef, roomId, onCodeChange }) => {
   const [text, setText] = useState("");
-  
+
   useEffect(() => {
-    if(socketRef.current){
-      socketRef.current.on(ACTIONS.CODE_CHANGE, (msg) => {
-        setText(msg);
-      });
+    const handleCodeChange = (msg) => {
+      setText(msg);
+      console.log(msg);
+    };
+
+    if (socketRef.current) {
+      socketRef.current.on(ACTIONS.CODE_CHANGE, handleCodeChange);
+
+      return () => {
+        socketRef.current.off(ACTIONS.CODE_CHANGE, handleCodeChange);
+      };
     }
   }, [socketRef.current]);
 
   const handleTextValue = (e) => {
-    setText(e.target.value);
-    // console.log(e.target.value)
-    socketRef.current.emit(ACTIONS.CODE_CHANGE, e.target.value);
+    const newText = e.target.value;
+    setText(newText);
+    onCodeChange(newText);
+    socketRef.current.emit(ACTIONS.CODE_CHANGE, newText);
   };
+
   return (
     <div className="codepage">
       <div className="header">
