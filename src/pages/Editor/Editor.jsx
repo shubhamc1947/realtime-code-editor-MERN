@@ -8,11 +8,12 @@ import CodePage from "../../components/CodePage/CodePage";
 import { initSocket } from "../../socket";
 import ACTIONS from "../../Actions";
 import { toast } from "react-hot-toast";
+import { scopeCompletionSource } from "@codemirror/lang-javascript";
 const Editor = () => {
   const socketRef = useRef(null);
   const codeRef = useRef(null);
 
-  const { roomid } = useParams();
+  const { roomId } = useParams();
 
   const reactNavigator = useNavigate();
 
@@ -20,7 +21,7 @@ const Editor = () => {
 
   const [clientList, setClientList] = useState([]);
 
-  console.log(JSON.stringify(clientList) + " client list");
+  // console.log(JSON.stringify(clientList) + " client list");
   // [{"socketId":"saC86VW_iK77IVLSAAAT","username":"adsfss"}] formate of this
   // console.log(location.state.username);
 
@@ -41,7 +42,7 @@ const Editor = () => {
 
       // join creating event
       socketRef.current.emit(ACTIONS.JOIN, {
-        roomid,
+        roomId,
         username: location.state?.username,
       });
 
@@ -49,7 +50,7 @@ const Editor = () => {
       socketRef.current.on(
         ACTIONS.JOINED,
         ({ clients, username, socketId,userSocketMap }) => {
-          console.log(JSON.stringify(userSocketMap))
+          // console.log(JSON.stringify(userSocketMap))
           // jo user join hua usko notification nhi bhejna hai
           if (username !== location.state?.username) {
             toast.success(`${username} joined the room.`);
@@ -58,17 +59,31 @@ const Editor = () => {
           setClientList(clients);
         }
       );
+
+      socketRef.current.on(
+        ACTIONS.DISCONNECTED,
+        ({ socketId,username }) => {
+            toast.success(`${username} Got Disconnected.`);
+            setClientList(prev=>{
+              return prev.filter(curr=>curr.socketId!=socketId);
+            })
+        }
+      );
+
+
     };
     init();
     return () => {
       //alll the on events we need to close it in returning fun
+      socketRef.current.off(ACTIONS.DISCONNECTED)
       socketRef.current.off(ACTIONS.JOINED);
+      socketRef.current.disconnect();
     };
   }, []);
 
   async function copyRoomId() {
     try {
-      await navigator.clipboard.writeText(roomid);
+      await navigator.clipboard.writeText(roomId);
       toast.success("Room ID has been copied to your clipboard");
     } catch (err) {
       toast.error("Could not copy the Room ID");
@@ -88,6 +103,8 @@ const Editor = () => {
       <div className="leftside">
         <div className="lefttop">
           <h3>Logo here</h3>
+          <h5>{location.state?.username}</h5>
+          <h6>Room {roomId?roomId:""}</h6>
           <hr />
           <div className="clientList">
             {clientList &&
@@ -99,28 +116,16 @@ const Editor = () => {
         <div className="leftbottom">
           <button onClick={copyRoomId}>Copy Room ID</button>
           <button onClick={leaveRoom}>Leave Room</button>
+
         </div>
       </div>
       <div className="rightside">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure nostrum
-        dolorum ducimus quae labore accusamus ullam iste necessitatibus, enim
-        est vero sapiente autem nisi libero ex? Omnis asperiores placeat fuga
-        provident magnam dolores Wha tis going on I don't know that abcd what is
-        hapducimus nisi obcaecati, officiis, quae earum veniam facere et rem.
-        Velit, aperiam. Quis dignissimos distinctio ex, eos nemo eaque minus
-        debitis repudiandae saepe odit voluptatum iusto vel consectetur eligendi
-        optio sequi maxime. Doloremque accusantium sequi totam ratione ea atque
-        facere error id incidunt, quasi facilis similique rem architecto
-        delectus! Assumenda modi fuga, commodi delectus animi fugit explicabo
-        odit dolore tenetur, sed non cum. Cumque molestiae corrupti accusamus!
-        Nesciunt asperiores sequi corporis quaerat laborum ullam recusandae,
-        reiciendis neque, earum debitis unde doloribus beatae! Inventore
-        molestiae accusantium sunt illum sit reiciendis quas?
-        {/* <CodePage socketRef={socketRef}
-                    roomId={roomid}
+        
+        <CodePage socketRef={socketRef}
+                    roomId={roomId}
                     onCodeChange={(code) => {
                         codeRef.current = code;
-                    }} /> */}
+                    }} />
       </div>
     </div>
   );

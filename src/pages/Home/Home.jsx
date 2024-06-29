@@ -7,20 +7,20 @@ import { compileString } from 'sass';
   const Home = () => {
     
     const navigate=useNavigate();
-    const [roomid, setRoomid] = useState("")
+    const [roomId, setRoomId] = useState("")
     const [username, setUsername] = useState("")
 
 
     const joinRoom = (e) => {
-      console.log("join rroomm")
+      // console.log("join rroomm")
       e.preventDefault();
-      if (roomid==="" || username==="") {
+      if (roomId==="" || username==="") {
           toast.error('ROOM ID & username is required');
           return;
       }
 
       // Redirect
-      navigate(`/editor/${roomid}`, {
+      navigate(`/editor/${roomId}`, {
           state: {
               username,
           },
@@ -29,7 +29,7 @@ import { compileString } from 'sass';
 
     function createNewRoom(){
       const newRoomId=id();
-      setRoomid(newRoomId);
+      setRoomId(newRoomId);
       toast.success('Created a new room');
     }
 
@@ -39,8 +39,8 @@ import { compileString } from 'sass';
         <form autoComplete='off'>
 
           <div className='inputgroup'>
-            <label htmlFor="roomid">Room Id</label>
-            <input type="text"  name="roomid" id="roomid" value={roomid} onChange={e=>setRoomid(e.target.value)} />
+            <label htmlFor="roomId">Room Id</label>
+            <input type="text"  name="roomId" id="roomId" value={roomId} onChange={e=>setRoomId(e.target.value)} />
           </div>
           <div className='inputgroup'>
             <label htmlFor="username">User Name</label>

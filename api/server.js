@@ -9,11 +9,11 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 const userSocketMap = {};
-function getAllConnectedClients(roomid) {
+function getAllConnectedClients(roomId) {
     // Map
-    // console.log("L14 all the same room id socket id "+Array.from(io.sockets.adapter.rooms.get(roomid)))//Q3HO1HY7CrLERgm_AAAZ,koclTwJuxg7BlxVkAAAb something like  this
-    //io.sockets.adapter.rooms.get(roomid)=> this gives all the socket id having this roomid
-    return Array.from(io.sockets.adapter.rooms.get(roomid) || []).map(
+    // console.log("L14 all the same room id socket id "+Array.from(io.sockets.adapter.rooms.get(roomId)))//Q3HO1HY7CrLERgm_AAAZ,koclTwJuxg7BlxVkAAAb something like  this
+    //io.sockets.adapter.rooms.get(roomId)=> this gives all the socket id having this roomId
+    return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
         (socketId) => {
             return {
                 socketId,
@@ -26,16 +26,16 @@ function getAllConnectedClients(roomid) {
 io.on('connection', (socket) => {
     // console.log('socket connected', socket.id);
     // console.log("--------------------")
-    socket.on(ACTIONS.JOIN, ({ roomid, username }) => {
+    socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
         
-        // console.log("Room id and username "+roomid,username+" is here ")
+        // console.log("Room id and username "+roomId,username+" is here ")
         // console.log("--------------------")
         userSocketMap[socket.id] = username;
         // console.log("L34 usersocketmap "+ JSON.stringify(userSocketMap)); storing in this formate 
         // {"7SdewvfUuZqDdSUZAAAN":"sdfasdf","I3C1H89rBdtdU2XPAAAP":"asdfgh","pisuSlco-V-bOOZWAAAR":"sdfasdf","saC86VW_iK77IVLSAAAT":"adsfss","w0SwcNcuLJ3MVYMVAAAV":"adsfss","15TmBRgV3FRV_ApvAAAX":"adsfss","Q3HO1HY7CrLERgm_AAAZ":"adsfss"}
 
-        socket.join(roomid);
-        const clients = getAllConnectedClients(roomid);
+        socket.join(roomId);
+        const clients = getAllConnectedClients(roomId);
 
         //with for loop we are sending each socket id of that room the new user name in username it's socket id and all the new clients array list so that they can so them in their dashboard
         
@@ -51,6 +51,26 @@ io.on('connection', (socket) => {
                 userSocketMap
             });
         });
+    });
+    socket.on(ACTIONS.CODE_CHANGE,(text)=>{
+        console.log(text);
+        socket.broadcast.emit(ACTIONS.CODE_CHANGE,(text));
+    })
+
+
+    //disconnecting process
+    socket.on('disconnecting', () => {
+
+        const rooms = [...socket.rooms];
+        // console.log("L62 All rooms list "+ rooms);
+        rooms.forEach((roomId) => {
+            socket.in(roomId).emit(ACTIONS.DISCONNECTED, {
+                socketId: socket.id,
+                username: userSocketMap[socket.id],
+            });
+        });
+        delete userSocketMap[socket.id];
+        socket.leave();
     });
 });
 
