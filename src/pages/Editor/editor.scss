@@ -1,0 +1,28 @@
+.editor{
+    background-color: white;
+    height: 100vh;
+    display: flex;
+    .leftside{
+      width:15%;
+      background-color: aliceblue;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    //   padding-block:1rem;
+        .lefttop{
+            .clientList{
+                display: flex;
+                flex-wrap: wrap;
+                gap:0.4rem;
+            }   
+        }
+        .leftbottom{
+            button{
+                background-color: blue;
+            }
+        }
+    }
+    .rightside{
+        width:85%;
+    }
+}

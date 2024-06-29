@@ -1,0 +1,15 @@
+.codepage{
+    .header{
+        display: flex;
+        .heading{
+            font-size: 3rem;
+            flex:1;
+        }
+        .effects{
+            flex:1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+    }
+}
