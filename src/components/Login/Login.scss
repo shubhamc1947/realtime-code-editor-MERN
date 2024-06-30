@@ -1,0 +1,33 @@
+// src/components/Login/Login.scss
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    padding: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+
+    input {
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 0.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  }
+}

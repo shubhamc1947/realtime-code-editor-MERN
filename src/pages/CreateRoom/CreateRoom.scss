@@ -1,0 +1,56 @@
+.createroom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      padding: 2rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+  
+      h2 {
+        margin-bottom: 1rem;
+      }
+  
+      .inputgroup {
+        margin-bottom: 1rem;
+  
+        label {
+          margin-bottom: 0.5rem;
+          font-weight: bold;
+        }
+  
+        input[type="text"] {
+        width: 100%;
+          padding: 0.5rem;
+          font-size: 1rem;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+  
+        input[type="submit"] {
+            width:100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+      }
+  
+      .newroomlink {
+        color: #007bff;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 0.9rem;
+        text-align: center;
+  
+        &:hover {
+          color: #0056b3;
+        }
+      }
+    }
+  }
+  

@@ -28,11 +28,14 @@
     "@uiw/codemirror-theme-solarized": "^4.22.2",
     "@uiw/react-codemirror": "^4.22.2",
     "@uiw/react-textarea-code-editor": "^3.0.2",
+    "axios": "^1.7.2",
+    "js-cookie": "^3.0.5",
     "react": "^18.3.1",
     "react-avatar": "^5.0.3",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.24.0",
+    "react-toastify": "^10.0.5",
     "scss": "^0.2.4",
     "socket.io-client": "^4.7.5",
     "uuid": "^10.0.0"
@@ -47,5 +50,9 @@
     "eslint-plugin-react-refresh": "^0.4.7",
     "sass": "^1.77.6",
     "vite": "^5.3.1"
-  }
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "vite.config.js",
+  "author": "",
+  "license": "ISC"
 }

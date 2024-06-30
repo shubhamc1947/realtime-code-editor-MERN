@@ -1,0 +1,25 @@
+// src/components/NavBar/NavBar.scss
+
+.navbar {
+  height: 60px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 1rem;
+  background-color: #282c34;
+  color: white;
+
+  a {
+    color: white;
+    text-decoration: none;
+    margin-right: 1rem;
+  }
+
+  button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
+}

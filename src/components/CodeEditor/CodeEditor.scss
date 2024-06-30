@@ -1,0 +1,28 @@
+// src/components/CodeEditor/CodeEditor.scss
+
+.codeeditor {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background-color: #282c34;
+    color: white;
+  }
+  
+  .effects {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  select {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+  
