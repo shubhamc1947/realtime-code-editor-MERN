@@ -10,7 +10,7 @@ function handleConnection(socket, io) {
   socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
     userSocketMap[socket.id] = username;
     socket.join(roomId);
-    console.log("L12 socketServicejs Room  is  "+ roomId+" and username "+username )
+    // console.log("L12 socketServicejs Room  is  "+ roomId+" and username "+username )
     const clients = getAllConnectedClients(roomId, userSocketMap,io);
 
     clients.forEach(({ socketId }) => {
@@ -24,12 +24,10 @@ function handleConnection(socket, io) {
   });
 
   socket.on(ACTIONS.CODE_CHANGE, (text) => {
-    console.log(text)
     socket.broadcast.emit(ACTIONS.CODE_CHANGE, text);
   });
 
   socket.on(ACTIONS.SYNC_CODE, ({ code, socketId }) => {
-    console.log(code)
     io.to(socketId).emit(ACTIONS.CODE_CHANGE, code);
   });
 

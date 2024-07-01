@@ -9,6 +9,7 @@ const Home = () => {
       <h1>Welcome to the Real-Time Code Editor</h1>
       <h2>Hello Uncle</h2>
       <h3><Link to={'/createRoom'}>Create New Room</Link></h3>
+      <h3><Link to={'/test'}>Tab</Link></h3>
     </div>
   );
 };

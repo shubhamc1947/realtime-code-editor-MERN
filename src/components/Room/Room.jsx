@@ -15,7 +15,14 @@ const Room = () => {
   const username=localStorage.getItem('username');
   
   const socketRef = useRef(null);
-  const codeRef = useRef(""); // Initialize with an empty string
+  const codeRef = useRef([
+    {
+      id: 1,
+      heading: 'Coding heading one',
+      code: "function (){console.log('hello')}",
+      lang: 'javascript',
+    },
+  ]); 
   const { roomId } = useParams();
   const reactNavigator = useNavigate();
   const location = useLocation();
@@ -89,7 +96,7 @@ const Room = () => {
     return <Navigate to="/" />;
   }
 
-  console.log(clientList)
+  console.warn(codeRef)
 
   return (
     <div className="room">

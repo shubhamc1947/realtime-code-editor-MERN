@@ -16,7 +16,8 @@ import NavBar from "./components/NavBar/NavBar";
 import Auth from "./components/ProtectedRoutes/Auth";
 import CreateRoom from './pages/CreateRoom/CreateRoom';
 import { AuthProvider } from "./contexts/AuthContext";
-import { compileString } from "sass";
+// import { compileString } from "sass";
+import CodeTab from "./components/CodeTab/CodeTab";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/createRoom" element={<Auth compo={CreateRoom}  />} />
 
           <Route path="/editor/:roomId" element={<RoomPage />} />
+          <Route path="/test" element={<CodeTab />} />
           
         </Routes>
       </AuthProvider>

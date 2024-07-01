@@ -1,5 +1,3 @@
-// src/components/CodeEditor/CodeEditor.js
-
 import React, { useState, useEffect } from 'react';
 import './CodeEditor.scss';
 import CodeMirror from '@uiw/react-codemirror';
@@ -45,14 +43,24 @@ const languages = {
 };
 
 const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
-  const [text, setText] = useState('');
+  const [tabs, setTabs] = useState([
+    {
+      id: 1,
+      heading: 'Coding heading one',
+      code: "function (){console.log('hello')}",
+      lang: 'javascript',
+    },
+  ]);
+  const [isActiveId, setIsActiveId] = useState(1);
   const [theme, setTheme] = useState('dracula');
-  const [language, setLanguage] = useState('javascript');
-  
+
   useEffect(() => {
     const handleCodeChange = (msg) => {
-      // console.log(msg);
-      setText(msg);
+      if (Array.isArray(msg)) {
+        setTabs(msg);
+      } else {
+        console.error('Received non-array message:', msg);
+      }
     };
 
     if (socketRef.current) {
@@ -64,44 +72,103 @@ const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
     }
   }, [socketRef.current]);
 
+  const handleChange = (e) => {
+    console.warn("hello handle change")
+    const { name, value } = e.target;
+    setTabs((prevTabs) =>{
+      const data=prevTabs.map((tab) =>
+        tab.id === isActiveId ? { ...tab, [name]: value } : tab
+      )
+      const updatedTab = tabs.find((tab) => tab.id === isActiveId);
+      socketRef.current.emit(ACTIONS.CODE_CHANGE, data);
+      onCodeChange(data);
+      return data;
+    });
+  };
+
   const handleTextValue = (value) => {
-    // console.log(value)
-    setText(value);
-    onCodeChange(value);
-    socketRef.current.emit(ACTIONS.CODE_CHANGE, value);
+    setTabs((prevTabs) => {
+      const updatedTabs = prevTabs.map((tab) =>
+        tab.id === isActiveId ? { ...tab, code: value } : tab
+      );
+      // Emit the updated tabs array to the socket
+      socketRef.current.emit(ACTIONS.CODE_CHANGE, updatedTabs);
+      onCodeChange(updatedTabs);
+      return updatedTabs;
+    });
+  };
+  
+
+  const addTab = () => {
+    const newId = tabs.length > 0 ? tabs[tabs.length - 1].id + 1 : 1;
+    const newTab = {
+      id: newId,
+      heading: `Coding heading ${newId}`,
+      code: '',
+      lang: 'javascript',
+    };
+    setTabs((prevTabs)=>{
+      const data=[...prevTabs, newTab];
+      setIsActiveId(newId);
+      socketRef.current.emit(ACTIONS.CODE_CHANGE, data);
+
+      return data;
+    })
+  };
+
+  const removeTab = (id) => {
+    console.log("hello")
+    console.log(id);
+    
+    setTabs((prev)=>{
+      const newTabs = tabs.filter((tab) => tab.id !== id);  
+      if (newTabs.length === 0) {
+        setIsActiveId(null);
+      } else if (id === isActiveId) {
+        setIsActiveId(newTabs[0].id);
+      }
+  
+      socketRef.current.emit(ACTIONS.CODE_CHANGE, newTabs);
+      onCodeChange(newTabs);
+      return newTabs;
+    });
+
+    
   };
 
   const downloadFile = () => {
-    const blob = new Blob([text], { type: 'text/plain' });
+    const activeTab = tabs.find((tab) => tab.id === isActiveId);
+    const blob = new Blob([activeTab.code], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'code.txt'; // Specify the file name here
+    a.download = 'code.txt';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    toast.success("File Download Successfully")
+    toast.success("File Download Successfully");
   };
+
+  console.log(tabs)
+  const activeTab = Array.isArray(tabs) ? tabs.find((tab) => tab.id === isActiveId) : null;
+
   return (
     <div className="codeeditor">
       <div className="header">
-        <div className="heading"><input type="text" name="" id="" placeholder='Code Bay' /></div>
+        <div className="heading"><input type="text" name="heading" value={activeTab?.heading} onChange={handleChange} /></div>
         <div className="effects">
           <div className="themewrap">
             <select onChange={(e) => setTheme(e.target.value)} value={theme}>
               {Object.keys(themes).map((themeKey) => (
                 <option key={themeKey} value={themeKey}>
-                  {themeKey.charAt(0).toUpperCase() + themeKey.slice(1)} (
-                  {themes[themeKey].mode.charAt(0).toUpperCase() +
-                    themes[themeKey].mode.slice(1)}
-                  )
+                  {themeKey.charAt(0).toUpperCase() + themeKey.slice(1)} ({themes[themeKey].mode.charAt(0).toUpperCase() + themes[themeKey].mode.slice(1)})
                 </option>
               ))}
             </select>
           </div>
           <div className="langwrap">
-            <select onChange={(e) => setLanguage(e.target.value)} value={language}>
+            <select name="lang" onChange={handleChange} value={activeTab?.lang}>
               {Object.keys(languages).map((langKey) => (
                 <option key={langKey} value={langKey}>
                   {langKey.charAt(0).toUpperCase() + langKey.slice(1)}
@@ -109,17 +176,36 @@ const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
               ))}
             </select>
           </div>
-        <button onClick={downloadFile}>Download Code</button>
+          <button onClick={downloadFile}>Download Code</button>
         </div>
       </div>
-
-      <CodeMirror
-        value={text}
-        theme={themes[theme].theme}
-        height="200px"
-        extensions={[languages[language] && languages[language]()]}
-        onChange={(value, viewUpdate) => handleTextValue(value)}
-      />
+      <div className="codetab">
+        <div className="codetabwrap">
+          <div className="tabnav">
+            {Array.isArray(tabs) && tabs.map((tab,i) => (
+              <div key={tab.id} className={tab.id === isActiveId ? "tab active" : "tab"}>
+                <button onClick={() => setIsActiveId(tab.id)}>
+                  {/* {tab.heading} */}
+                  Tab {i+1}
+                </button>
+                <button onClick={() => removeTab(tab.id)} className="close-btn">x</button>
+              </div>
+            ))}
+            <button onClick={addTab}>Add Tab</button>
+          </div>
+          {activeTab && (
+            <div className="tabinfo active">
+              <CodeMirror
+                value={activeTab.code}
+                theme={themes[theme].theme}
+                height="200px"
+                extensions={[languages[activeTab.lang] && languages[activeTab.lang]()]}
+                onChange={(value) => handleTextValue(value)}
+              />
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
