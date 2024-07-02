@@ -31,16 +31,10 @@ app.use('/api/auth', authRoutes);
 
 // Socket.io handling
 io.on('connection', (socket) => {
-  // console.log("L34 serverjs hello")
-  // console.log("L35 serverjs New Scoket Id is "+socket.id)
   socketService.handleConnection(socket, io);
 });
 
-// Connect to MongoDB
 connectDB();
-
-// Serve static assets (if needed)
-// app.use(express.static(path.join(__dirname, 'public')));
 
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

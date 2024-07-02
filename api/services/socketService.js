@@ -7,12 +7,12 @@ const { getAllConnectedClients } = require('../utils/socketUtils');
 let userSocketMap = {};
 
 function handleConnection(socket, io) {
-  
   socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
     userSocketMap[socket.id] = username;
     socket.join(roomId);
     // console.log("L12 socketServicejs Room  is  "+ roomId+" and username "+username )
     const clients = getAllConnectedClients(roomId, userSocketMap,io);
+    console.log(JSON.stringify(userSocketMap))
 
     clients.forEach(({ socketId }) => {
       io.to(socketId).emit(ACTIONS.JOINED, {
