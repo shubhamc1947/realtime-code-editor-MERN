@@ -1,5 +1,6 @@
 // services/socketService.js
 
+const { SkypeSource } = require('react-avatar');
 const ACTIONS = require('../actions');
 const { getAllConnectedClients } = require('../utils/socketUtils');
 
@@ -28,7 +29,8 @@ function handleConnection(socket, io) {
   });
 
   socket.on(ACTIONS.SYNC_CODE, ({ code, socketId }) => {
-    io.to(socketId).emit(ACTIONS.CODE_CHANGE, code);
+    console.log("-----------------------------------"+JSON.stringify(code)+" "+userSocketMap[socketId])
+    socket.to(socketId).emit(ACTIONS.CODE_CHANGE, code);
   });
 
   socket.on('disconnecting', () => {

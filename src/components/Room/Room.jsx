@@ -54,6 +54,7 @@ const Room = () => {
         setClientList(clients);
 
         if (codeRef.current) {
+          console.log(codeRef+" code is going here");
           socketRef.current.emit(ACTIONS.SYNC_CODE, {
             code: codeRef.current,
             socketId,
