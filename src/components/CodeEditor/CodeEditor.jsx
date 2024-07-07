@@ -76,25 +76,25 @@ const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
     console.warn("hello handle change")
     const { name, value } = e.target;
     setTabs((prevTabs) =>{
-      const data=prevTabs.map((tab) =>
+      const codingText=prevTabs.map((tab) =>
         tab.id === isActiveId ? { ...tab, [name]: value } : tab
       )
       const updatedTab = tabs.find((tab) => tab.id === isActiveId);
-      socketRef.current.emit(ACTIONS.CODE_CHANGE, data);
-      onCodeChange(data);
-      return data;
+      socketRef.current.emit(ACTIONS.CODE_CHANGE, {roomId,codingText});
+      onCodeChange(codingText);
+      return codingText;
     });
   };
 
   const handleTextValue = (value) => {
     setTabs((prevTabs) => {
-      const updatedTabs = prevTabs.map((tab) =>
+      const codingText = prevTabs.map((tab) =>
         tab.id === isActiveId ? { ...tab, code: value } : tab
       );
       // Emit the updated tabs array to the socket
-      socketRef.current.emit(ACTIONS.CODE_CHANGE, updatedTabs);
-      onCodeChange(updatedTabs);
-      return updatedTabs;
+      socketRef.current.emit(ACTIONS.CODE_CHANGE, {roomId,codingText});
+      onCodeChange(codingText);
+      return codingText;
     });
   };
   
@@ -108,11 +108,11 @@ const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
       lang: 'javascript',
     };
     setTabs((prevTabs)=>{
-      const data=[...prevTabs, newTab];
+      const codingText=[...prevTabs, newTab];
       setIsActiveId(newId);
-      socketRef.current.emit(ACTIONS.CODE_CHANGE, data);
+      socketRef.current.emit(ACTIONS.CODE_CHANGE, {roomId,codingText});
 
-      return data;
+      return codingText;
     })
   };
 
@@ -121,16 +121,16 @@ const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
     console.log(id);
     
     setTabs((prev)=>{
-      const newTabs = tabs.filter((tab) => tab.id !== id);  
-      if (newTabs.length === 0) {
+      const codingText = tabs.filter((tab) => tab.id !== id);  
+      if (codingText.length === 0) {
         setIsActiveId(null);
       } else if (id === isActiveId) {
-        setIsActiveId(newTabs[0].id);
+        setIsActiveId(codingText[0].id);
       }
   
-      socketRef.current.emit(ACTIONS.CODE_CHANGE, newTabs);
-      onCodeChange(newTabs);
-      return newTabs;
+      socketRef.current.emit(ACTIONS.CODE_CHANGE, {roomId,codingText});
+      onCodeChange(codingText);
+      return codingText;
     });
 
     

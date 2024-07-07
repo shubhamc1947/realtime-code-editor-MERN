@@ -1,6 +1,5 @@
 // services/socketService.js
-
-const { SkypeSource } = require('react-avatar');
+var colors = require('colors/safe');
 const ACTIONS = require('../actions');
 const { getAllConnectedClients } = require('../utils/socketUtils');
 
@@ -9,10 +8,12 @@ let userSocketMap = {};
 function handleConnection(socket, io) {
   socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
     userSocketMap[socket.id] = username;
+  
     socket.join(roomId);
+
     // console.log("L12 socketServicejs Room  is  "+ roomId+" and username "+username )
     const clients = getAllConnectedClients(roomId, userSocketMap,io);
-    console.log(JSON.stringify(userSocketMap))
+    console.log(JSON.stringify(userSocketMap)+" ---room id ----"+ roomId)
 
     clients.forEach(({ socketId }) => {
       io.to(socketId).emit(ACTIONS.JOINED, {
@@ -24,13 +25,14 @@ function handleConnection(socket, io) {
     });
   });
 
-  socket.on(ACTIONS.CODE_CHANGE, (text) => {
-    socket.broadcast.emit(ACTIONS.CODE_CHANGE, text);
+  socket.on(ACTIONS.CODE_CHANGE, ({roomId,codingText}) => {
+    const text=codingText;
+    socket.to(roomId).emit(ACTIONS.CODE_CHANGE, text);
   });
 
   socket.on(ACTIONS.SYNC_CODE, ({ code, socketId }) => {
     console.log("-----------------------------------"+JSON.stringify(code)+" "+userSocketMap[socketId])
-    socket.to(socketId).emit(ACTIONS.CODE_CHANGE, code);
+    io.to(socketId).emit(ACTIONS.CODE_CHANGE, code);//sahi hai
   });
 
   socket.on('disconnecting', () => {
