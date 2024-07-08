@@ -3,6 +3,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import './Register.scss';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
   const { registerHandler } = useContext(AuthContext);
@@ -23,7 +24,7 @@ const Register = () => {
   return (
     <div className="register">
       <form onSubmit={handleSubmit}>
-        <h2>Register</h2>
+        <h2>Register ...</h2>
         <input
           type="email"
           name="username"
@@ -52,6 +53,7 @@ const Register = () => {
           autoComplete="new-password"
         />
         <button type="submit">Register</button>
+        <p>Already have any account? <Link to="/login">Login here</Link></p>
       </form>
     </div>
   );

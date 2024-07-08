@@ -29,7 +29,7 @@ const CreateRoom = () => {
     <div className='createroom'>
       <form autoComplete='off'>
         <div className='inputgroup'>
-          <label htmlFor="roomId">Room Id</label>
+          <label htmlFor="roomId">Room Id ...</label>
           <input type="text" name="roomId" id="roomId" placeholder='Enter Room ID' value={roomId} onChange={e => setRoomId(e.target.value)} />
         </div>
         <div className='inputgroup'>

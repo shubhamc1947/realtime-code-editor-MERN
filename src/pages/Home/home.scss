@@ -1,15 +1,145 @@
 // src/pages/Home/Home.scss
 
 .home {
+  
+    background-color: #282c34;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     height: calc(100vh - 60px);
-    gap:2rem;
   
+    .container{
+      width:100%;
+      max-width: 1100px;
+      margin:auto;
+      .textcont{
+        display: flex;
+        justify-content: center;
+        gap:1.25rem;
+        align-items: center;
+        flex-direction: column;
+        h1 {
+          margin:auto;
+          font-size: 3.2rem;
+          font-weight: 400;
+          color:#6096B4;
+    
+        }
+        h2{
+          font-size: 1.6rem;
+          font-weight: 400;
+          color:aliceblue;
+        }
+        h3{
+
+        }
+        
+      }
+    }
+  }
+
+
+  .sharebtn {
+    margin-top: 1rem;
+    padding:0.5rem 1rem;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: .25rem;
+    box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+    color: rgba(0, 0, 0, 0.85);
+    cursor: pointer;
+    display: inline-flex;
+    transition: all 250ms;
+    width: auto;
+    font-size: 1.2rem;
+  }
+  
+  .sharebtn:hover,
+  .sharebtn:focus {
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+    color: rgba(0, 0, 0, 0.65);
+  }
+  
+  .sharebtn:hover {
+    transform: translateY(-1px);
+  }
+  
+  .sharebtn:active {
+    background-color: #F0F0F1;
+    border-color: rgba(0, 0, 0, 0.15);
+    box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+    color: rgba(0, 0, 0, 0.65);
+    transform: translateY(0);
+  }
+
+  // about section css
+  .about{
+    margin-block:2rem;
     h1 {
-      font-size: 2rem;
+      display: flex;justify-content: center;
+      font-size: 2.8rem;
+      font-weight: 400;
+      margin:auto;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      width:100%;
+      max-width: 1100px;
+      margin:auto;
+      display: flex;
+      justify-content: space-around;
+      // align-items: center;
+      padding: 50px 0;
+    
+     .feature {
+      box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+      padding:0.7rem;
+      border-radius: 5px;
+      flex:1;
+        margin: 0 15px;
+        h1{
+          font-size: 1.8rem;
+          color:#6096B4;
+        }
+        
+        p {
+          font-family: "Playwrite GB S", 'cursive';
+          text-align: justify;
+          font-size: 1.2em;
+          line-height: 1.5;
+          margin-bottom: 30px;
+        }
+    
+        .sharebtn{
+          background-color: #CCA8E9;
+          color:#333;
+        }
+      }
     }
   }
   
+
+  .footer{
+    
+    .container{
+      background-color: #282c34;
+      display: flex;
+      justify-content: space-between;
+      padding:1.5rem 2rem;
+      .links{
+        display: flex;
+        gap:1rem;
+        font-size: 1.4rem;
+        color:aliceblue;
+        color:#609684;
+        
+      }
+      h4{
+        font-family: "Playwrite GB S", 'cursive';
+        color:aliceblue;font-weight: 400;
+      }
+    }
+  }

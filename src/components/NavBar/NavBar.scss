@@ -2,13 +2,14 @@
 
 .navbar {
   height: 60px;
-
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-inline: 1rem;
   background-color: #282c34;
   color: white;
+  box-shadow: red 0px 1px 4px;
 
   a {
     color: white;

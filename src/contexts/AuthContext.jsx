@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 const AuthContext = createContext();
 export const useAuth=()=>useContext(AuthContext);
+
 const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     username: localStorage.getItem('username'),

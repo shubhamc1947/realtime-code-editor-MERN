@@ -1,8 +1,14 @@
 // src/components/Room/Room.js
 
 import React, { useState, useEffect, useRef } from "react";
+//tooltip
+
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+//react router dom
 import { useLocation, useNavigate, useParams, Navigate } from "react-router-dom";
-import io from 'socket.io-client';
+
+
 import CodeEditor from '../CodeEditor/CodeEditor';
 import {ClientLogo} from '../ClientLogo/ClientLogo';
 import {initSocket} from '../../socket';
@@ -103,19 +109,21 @@ const Room = () => {
     <div className="room">
       <div className="leftside">
         <div className="lefttop">
-          <h3>Logo here</h3>
-          <h5>{username}</h5>
-          <h6>Room {roomId || ""}</h6>
-          <hr />
+          {/* <h5>{username}</h5> */}
+          {/* <h6>Room {roomId || ""}</h6> */}
+          {/* <hr /> */}
           <div className="clientList">
-            {clientList.map((client) => (
-              <ClientLogo key={client.socketId} username={client.username} />
+            {clientList.map((client,idx) => (
+              <ClientLogo data-tooltip-id={idx+500} data-tooltip-content="Hello world!" key={client.socketId} username={client.username} />
             ))}
           </div>
         </div>
         <div className="leftbottom">
-          <button onClick={copyRoomId}>Copy Room ID</button>
-          <button onClick={leaveRoom}>Leave Room</button>
+          <button onClick={copyRoomId} data-tooltip-id="copybtn" data-tooltip-content="Copy Room Id" ><i className="fa-solid fa-copy"></i></button>
+          <button onClick={leaveRoom} data-tooltip-id="leavebtn" data-tooltip-content="Leave the room" ><i className="fa-solid fa-right-from-bracket"></i></button>
+          <Tooltip style={{ backgroundColor: "white", color: "#333" }} id="copybtn" />
+          <Tooltip style={{ backgroundColor: "white", color: "#333" }} id="leavebtn" />
+
         </div>
       </div>
       <div className="rightside">

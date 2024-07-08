@@ -4,21 +4,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100%;
+  width: 100%;
+  background-color: #282c34;
 
   form {
+    background-color: white;
     display: flex;
     flex-direction: column;
-    width: 300px;
+    width: 350px;
     padding: 2rem;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-shadow: #609684 0px 2px 8px 0px;
 
     h2 {
       margin-bottom: 1rem;
     }
 
     input {
+      border: 1px solid #ccc;
+
       margin-bottom: 1rem;
       padding: 0.5rem;
       font-size: 1rem;
@@ -29,5 +35,17 @@
       font-size: 1rem;
       cursor: pointer;
     }
+    p{
+      font-size: 0.8rem;
+      margin-top: 1rem;
+      a{
+        color:rgb(7, 7, 173);
+      }
+    }
   }
+}
+
+input:focus{
+  border: 1px solid #ccc;
+  outline: none;
 }

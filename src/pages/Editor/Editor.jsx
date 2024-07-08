@@ -87,7 +87,7 @@ const Editor = () => {
     <div className="editor">
       <div className="leftside">
         <div className="lefttop">
-          <h3>Logo here</h3>
+          <h3>Logo heresss</h3>
           <h5>{location.state?.username}</h5>
           <h6>Room {roomId || ""}</h6>
           <hr />

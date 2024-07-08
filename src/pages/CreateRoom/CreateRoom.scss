@@ -2,12 +2,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: calc(100VH - 60PX);
+    background-color: #282c34;
+
   
     form {
+      background-color: white;
       display: flex;
       flex-direction: column;
-      width: 300px;
+      width: 350px;
       padding: 2rem;
       border: 1px solid #ccc;
       border-radius: 4px;
@@ -18,10 +21,14 @@
   
       .inputgroup {
         margin-bottom: 1rem;
-  
+        
         label {
-          margin-bottom: 0.5rem;
+          display: block;
+          margin-bottom: 1rem;
           font-weight: bold;
+          font-family: "Playwrite GB S", 'cursive';
+          font-size: 1.4rem;
+
         }
   
         input[type="text"] {

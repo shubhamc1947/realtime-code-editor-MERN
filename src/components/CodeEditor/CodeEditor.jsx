@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './CodeEditor.scss';
 import CodeMirror from '@uiw/react-codemirror';
+
+//tooltip
+
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
+
+
 // languages
 import { javascript } from '@codemirror/lang-javascript';
 import { cpp } from '@codemirror/lang-cpp';
@@ -156,7 +163,10 @@ const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
   return (
     <div className="codeeditor">
       <div className="header">
-        <div className="heading"><input type="text" name="heading" value={activeTab?.heading} onChange={handleChange} /></div>
+        <div className="heading">
+            {/* <label htmlFor="codeheading">Code Header</label>  */}
+            <input type="text" id="codeheading" name="heading" value={activeTab?.heading} onChange={handleChange} />
+        </div>
         <div className="effects">
           <div className="themewrap">
             <select onChange={(e) => setTheme(e.target.value)} value={theme}>
@@ -176,7 +186,8 @@ const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
               ))}
             </select>
           </div>
-          <button onClick={downloadFile}>Download Code</button>
+          <button onClick={downloadFile} data-tooltip-place="bottom-end" data-tooltip-id="downloadbtn" data-tooltip-content="Download Code" ><i className="fa-solid fa-download"></i></button>
+          <Tooltip style={{ backgroundColor: "white", color: "#333" }} id="downloadbtn" />
         </div>
       </div>
       <div className="codetab">
@@ -185,20 +196,18 @@ const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
             {Array.isArray(tabs) && tabs.map((tab,i) => (
               <div key={tab.id} className={tab.id === isActiveId ? "tab active" : "tab"}>
                 <button onClick={() => setIsActiveId(tab.id)}>
-                  {/* {tab.heading} */}
                   Tab {i+1}
                 </button>
-                <button onClick={() => removeTab(tab.id)} className="close-btn">x</button>
+                <button onClick={() => removeTab(tab.id)} className="close-btn"><i class="fa-solid fa-xmark"></i></button>
               </div>
             ))}
-            <button onClick={addTab}>Add Tab</button>
+            <button onClick={addTab} className='addbtn' ><i class="fa-solid fa-plus"></i></button>
           </div>
           {activeTab && (
             <div className="tabinfo active">
               <CodeMirror
                 value={activeTab.code}
                 theme={themes[theme].theme}
-                height="200px"
                 extensions={[languages[activeTab.lang] && languages[activeTab.lang]()]}
                 onChange={(value) => handleTextValue(value)}
               />

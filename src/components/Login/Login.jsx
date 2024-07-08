@@ -3,6 +3,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import './Login.scss';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const { loginHandler } = useContext(AuthContext);
@@ -21,7 +22,7 @@ const Login = () => {
   return (
     <div className="login">
       <form onSubmit={handleSubmit}>
-        <h2>Login</h2>
+        <h2>Login ...</h2>
         <input
           type="email"
           name="username"
@@ -41,6 +42,7 @@ const Login = () => {
           autoComplete="current-password"
         />
         <button type="submit">Login</button>
+        <p>Don't have any account? <Link to="/register">Create One</Link></p>
       </form>
     </div>
   );
