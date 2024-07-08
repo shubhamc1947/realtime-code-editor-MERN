@@ -34,13 +34,13 @@ const Home = () => {
       <div className="home">
         <div className="container">
           <div className="textcont">
-            <h1>Where Code Meets Collaboration .</h1>
+            <h1>Where Code Meets Collaboration.</h1>
             <h2 style={{ color: "red" }}>
               {/* {joke == "" ? <p>Loading...</p> : joke} */}
             </h2>
             <h2>
               Solve, Teach, and Interview: The Online Code Editor for Every
-              Occasion ...
+              Occasion...
             </h2>
             <h3>
               <Link to={"/createRoom"} className="sharebtn">Create New Room</Link>
@@ -51,6 +51,15 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      <div className="videocont">
+          {/* demo section */}
+        <video  autoPlay loop  muted playsInline>
+          <source src="./demo.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+
       {/* About Section */}
       <div className="about">
           <h1>Collaborative Coding ...</h1>

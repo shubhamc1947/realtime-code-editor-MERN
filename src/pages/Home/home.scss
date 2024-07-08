@@ -74,6 +74,23 @@
     transform: translateY(0);
   }
 
+  //video cont
+
+  .videocont{
+    background: rgb(40,44,52);
+    background: linear-gradient(180deg, rgba(40,44,52,1) 0%, rgba(41,45,54,1) 25%, rgba(61,56,79,1) 50%, rgba(136,99,178,1) 100%);
+    
+    display: flex;
+    justify-content: center;
+    height: 80vh;
+    padding-block: 2rem;
+    video{
+      
+    }
+
+  }
+
+
   // about section css
   .about{
     margin-block:2rem;

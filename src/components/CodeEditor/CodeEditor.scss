@@ -30,9 +30,10 @@
         width:100%;
         padding:0.40rem 0.5rem;
         border-radius: 3px;
-       font-size: 1.2rem;
-       border:none;
-       outline:none;
+        font-size: 1.2rem;
+        font-weight: 100;
+        border:none;
+        outline:none;
        &:focus{
         outline:none;
         border:none;

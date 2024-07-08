@@ -10,7 +10,7 @@ const NavBar = () => {
   console.log(authState);
   return (
     <nav className="navbar">
-      <Link to="/">Home</Link>
+      <Link to="/"><h1>CollabCode<span>.</span></h1></Link>
       {authState.username ? (
         <>
           <button onClick={logoutHandler}>Logout</button>
