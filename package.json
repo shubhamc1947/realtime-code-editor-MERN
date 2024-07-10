@@ -29,6 +29,7 @@
     "@uiw/react-codemirror": "^4.22.2",
     "@uiw/react-textarea-code-editor": "^3.0.2",
     "axios": "^1.7.2",
+    "framer-motion": "^11.2.13",
     "js-cookie": "^3.0.5",
     "react": "^18.3.1",
     "react-avatar": "^5.0.3",

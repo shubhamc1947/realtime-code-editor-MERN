@@ -3,8 +3,11 @@ import { Link,useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import "./Home.scss";
 
+import { motion } from "framer-motion";
+
 import { ToastContainer, toast } from 'react-toastify';
 const Home = () => {
+
   // const [joke, setjoke] = useState("Hello uncle");
   // async function dadJokesApi() {
   //   const data = await fetch("https://icanhazdadjoke.com/slack");
@@ -27,13 +30,77 @@ const Home = () => {
     }
   }, [location.state]);
 
+  //framer motion css
+  const variants={
+    initial:{
+      y:-100,
+      opacity:0
+    },
+    animate:{
+      y:0,
+      opacity:1,
+      transition:{
+        duration:1,
+        delay:0.5,
+      }
+    },
+    btn:{
+      y:[-6,0,6,0,-6],
+      opacity:0.8,
+      transition:{
+        duration:2,
+        opacity:0.9,
+        repeat:Infinity
+      }
+    },
+  }
+
+  const otherVariants={
+    initial:{
+      y:50,
+      opacity:0.5
+    },
+    animate:{
+      y:0,
+      opacity:1,
+      transition:{
+        duration: 1,
+        delayChildren: 0.3,
+        staggerChildren: 0.2
+      }
+    }
+  }
+
+  const item = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1
+    }
+  };
+
+  const aboutVariants={
+    initial:{
+      y:50,
+      opacity:0.5
+    },
+    initial:{
+      y:0,
+      opacity:1,
+      transition:{
+        duration:1,
+
+      }
+    }
+  }
+
 
   return (
     <>
       {/* home section */}
-      <div className="home">
-        <div className="container">
-          <div className="textcont">
+      <motion.div className="home" >
+        <motion.div className="container">
+          <motion.div className="textcont" variants={variants} initial="initial" animate="animate">
             <h1>Where Code Meets Collaboration.</h1>
             <h2 style={{ color: "red" }}>
               {/* {joke == "" ? <p>Loading...</p> : joke} */}
@@ -42,64 +109,61 @@ const Home = () => {
               Solve, Teach, and Interview: The Online Code Editor for Every
               Occasion...
             </h2>
-            <h3>
-              <Link to={"/createRoom"} className="sharebtn">Create New Room</Link>
-            </h3>
-            {/* <h3>
-              <Link to={"/test"}>Tab</Link>
-            </h3> */}
-          </div>
-        </div>
-      </div>
+            <motion.h3  variants={variants} animate="btn">
+              <Link to={"/createRoom"} className="sharebtn" variants={variants} animate="btn" >Create New Room</Link>
+            </motion.h3>
+          </motion.div>
+        </motion.div>
+      </motion.div>
 
-      <div className="videocont">
+      <motion.div className="videocont">
           {/* demo section */}
-        <video  autoPlay loop  muted playsInline>
-          <source src="./demo.mp4" type="video/mp4" />
-        </video>
-      </div>
+          <motion.video variants={otherVariants} initial="initial"  whileInView="animate" autoPlay controls loop  muted playsInline>
+            <motion.source src="./demo.mp4" type="video/mp4" />
+          </motion.video>
+      </motion.div>
 
 
       {/* About Section */}
-      <div className="about">
-          <h1>Collaborative Coding ...</h1>
-        <div className="container">
-          <div className="feature">
+      <motion.div className="about" >
+          <motion.h1 variants={otherVariants} initial="initial" whileInView="animate">Collaborative Coding ...</motion.h1>
+        <motion.div className="container">
+          <motion.div className="feature" variants={otherVariants} >
             <h1>Team Up</h1>
             <p>
               Open a shared editor, write or paste code, and collaborate with
               friends and colleagues in real-time.
             </p>
             <Link to={"/createRoom"} className="sharebtn">Code Together</Link>
-          </div>
-          <div className="feature">
+          </motion.div>
+          <motion.div className="feature" variants={otherVariants} >
             <h1>Evaluate Talent</h1>
             <p>
               Assign coding tasks and observe candidates' skills in real-time,
               whether in-person or remote.
             </p>
             <Link to={"/createRoom"} className="sharebtn">Conduct an Interview</Link>
-          </div>
-          <div className="feature">
+          </motion.div>
+          <motion.div className="feature" variants={otherVariants} >
             <h1>Share Knowledge</h1>
             <p>
               Share your code with students and peers, and guide them through
               the learning process. Top universities rely on us every day.
             </p>
             <Link to={"/createRoom"} className="sharebtn">Teach to learn</Link>
-          </div>
-        </div>
-      </div>
-      <div className="footer">
-        <div className="container">
-          <div className="links">
+          </motion.div>
+        </motion.div>
+      </motion.div>
+      <motion.div className="footer">
+        <motion.div className="container">
+          <motion.div className="links">
             <a href="https://github.com/shubhamc1947" target="_blank"><i className="fa-brands fa-github"></i></a>
             <a href="https://www.linkedin.com/in/shubhamchat03/" target="_blank"><i className="fa-brands fa-linkedin"></i></a>
             <a href="https://twitter.com/shubham_1947" target="_blank"><i className="fa-brands fa-square-x-twitter"></i></a>
-          </div>
+          </motion.div>
           <h4>Created By Shubham with ❤</h4>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </>
   );
 };
