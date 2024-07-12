@@ -29,6 +29,11 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/auth', authRoutes);
 
+app.get("/",(req,resp)=>{
+  resp.send("Code Editor Api is working fine");
+})
+
+
 // Socket.io handling
 io.on('connection', (socket) => {
   socketService.handleConnection(socket, io);
