@@ -1,7 +1,7 @@
 // src/pages/Home/Home.js
 import { Link,useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import "./Home.scss";
+import "./home.scss";
 
 import { motion } from "framer-motion";
 
@@ -84,7 +84,7 @@ const Home = () => {
       y:50,
       opacity:0.5
     },
-    initial:{
+    animate:{
       y:0,
       opacity:1,
       transition:{
