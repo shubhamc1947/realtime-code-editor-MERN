@@ -1,5 +1,4 @@
-// services/socketService.js
-var colors = require('colors/safe');
+
 const ACTIONS = require('../actions');
 const { getAllConnectedClients } = require('../utils/socketUtils');
 
