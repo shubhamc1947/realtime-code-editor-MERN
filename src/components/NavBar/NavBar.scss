@@ -2,12 +2,13 @@
 
 .navbar {
   height: 60px;
-  
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-inline: 1rem;
-  background-color: #282c34;
+  background-color: transparent;
   color: white;
   h1{
     span{

@@ -94,9 +94,38 @@ const Home = () => {
     }
   }
 
+  
+const initialAnimation = () => {
+  const particleContainer = document.querySelector(".particles");
+  const starBackground = document.querySelector(".star-background");
+
+  for (let i = 0; i < 100; i++) {
+    const particle = document.createElement("div");
+    particle.classList.add("particle");
+    particle.style.top = `${Math.random() * 100}vh`;
+    particle.style.left = `${Math.random() * 100}vw`;
+    particle.style.animationDelay = `${Math.random() * 10}s`;
+    particleContainer.appendChild(particle);
+  }
+
+  for (let i = 0; i < 300; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    star.style.top = `${Math.random() * 100}vh`;
+    star.style.left = `${Math.random() * 100}vw`;
+    starBackground.appendChild(star);
+  }
+};
+
+useEffect(() => {
+  initialAnimation();
+
+}, []);
 
   return (
-    <>
+    <div className="homeanimationwrap">
+        <div className="particles"></div>
+        <div className="star-background"></div>
       {/* home section */}
       <motion.div className="home" >
         <motion.div className="container">
@@ -116,12 +145,14 @@ const Home = () => {
         </motion.div>
       </motion.div>
 
-      <motion.div className="videocont">
-          {/* demo section */}
-          <motion.video variants={otherVariants} initial="initial"  whileInView="animate" autoPlay controls loop  muted playsInline>
-            <motion.source src="./demo.mp4" type="video/mp4" />
-          </motion.video>
-      </motion.div>
+      <div className="videocontbg">
+        <motion.div className="videocont">
+            {/* demo section */}
+            <motion.video variants={otherVariants} initial="initial"  whileInView="animate" autoPlay controls loop  muted playsInline>
+              <motion.source src="./demo.mp4" type="video/mp4" />
+            </motion.video>
+        </motion.div>
+      </div>
 
 
       {/* About Section */}
@@ -164,7 +195,7 @@ const Home = () => {
           <h4>Created By Shubham with ❤</h4>
         </motion.div>
       </motion.div>
-    </>
+    </div>
   );
 };
 
