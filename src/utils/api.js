@@ -9,7 +9,7 @@ axios.defaults.withCredentials = true;
 export const login = async (credentials) => {
   console.log("login here is happneing testing text")
   console.log(API_BASE_URL)
-  const response = await axios.post(`${API_BASE_URL}/api/auth/login`, credentials);
+  const response = await axios.post(`${API_BASE_URL}/api/auth/login`, credentials ,{withCredentials: true});
   console.log(response.data)
   return response.data;
 };
