@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+// const io = socketIo(server);
 
 // Middleware
 app.use(express.json());
@@ -38,6 +38,14 @@ app.get("/",(req,resp)=>{
   resp.send("Code Editor Api is working fine");
 })
 
+
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 
 // Socket.io handling
 io.on('connection', (socket) => {
