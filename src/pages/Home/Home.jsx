@@ -1,7 +1,7 @@
 // src/pages/Home/Home.js
 import { Link,useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import "./Home.scss";
+import "./home.scss";
 
 
 import { motion } from "framer-motion";
