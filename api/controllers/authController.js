@@ -11,11 +11,11 @@ const register = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ msg: 'User already exists' });
     }
-
+    
     const hashedPassword = await bcrypt.hash(password, 7);
     const newUser = new User({ username, password: hashedPassword });
     await newUser.save();
-
+    
     const token = generateToken(newUser);
     res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
     res.json({ msg: 'Registration successful' });
@@ -26,6 +26,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  console.log("login page is here");
   const { username, password } = req.body;
   try {
     const user = await User.findOne({ username });
