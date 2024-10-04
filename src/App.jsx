@@ -1,6 +1,7 @@
 // src/App.js
 
 import React from "react";
+import { Analytics } from "@vercel/analytics/react"
 import {
   Route,
   Routes,
@@ -47,6 +48,7 @@ function App() {
          pauseOnHover
          theme="light"
       />
+      <Analytics />
     </Router>
   );
 }
