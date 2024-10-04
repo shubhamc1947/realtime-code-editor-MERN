@@ -124,8 +124,7 @@ const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
   };
 
   const removeTab = (id) => {
-    console.log("hello")
-    console.log(id);
+    // console.log(id);
     
     setTabs((prev)=>{
       const codingText = tabs.filter((tab) => tab.id !== id);  
@@ -157,7 +156,7 @@ const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
     toast.success("File Download Successfully");
   };
 
-  console.log(tabs)
+  // console.log(tabs)
   const activeTab = Array.isArray(tabs) ? tabs.find((tab) => tab.id === isActiveId) : null;
 
   return (
@@ -198,10 +197,10 @@ const CodeEditor = ({ socketRef, roomId, onCodeChange }) => {
                 <button onClick={() => setIsActiveId(tab.id)}>
                   Tab {i+1}
                 </button>
-                <button onClick={() => removeTab(tab.id)} className="close-btn"><i class="fa-solid fa-xmark"></i></button>
+                <button onClick={() => removeTab(tab.id)} className="close-btn"><i className="fa-solid fa-xmark"></i></button>
               </div>
             ))}
-            <button onClick={addTab} className='addbtn' ><i class="fa-solid fa-plus"></i></button>
+            <button onClick={addTab} className='addbtn' ><i className="fa-solid fa-plus"></i></button>
           </div>
           {activeTab && (
             <div className="tabinfo active">

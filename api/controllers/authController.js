@@ -26,11 +26,11 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  console.log("login page is here");
+  // console.log("login page is here");
   const { username, password } = req.body;
   try {
     const user = await User.findOne({ username });
-    console.log(username)
+    // console.log(username)
     if (!user) {
       
       return res.status(400).json({ msg: 'Invalid credentials' });

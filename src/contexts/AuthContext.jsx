@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
 
   const loginHandler = async (credentials) => {
     try {
-      console.log(credentials);
+      // console.log(credentials);
       const response = await login(credentials);
       if (response.msg === 'Login successful') {
         setAuthState({ username: credentials.username });

@@ -9,7 +9,7 @@ import { motion } from "framer-motion"
 
 const NavBar = () => {
   const { authState, logoutHandler } = useContext(AuthContext);
-  console.log(authState);
+  // console.log(authState);
 
   //framer motion varient
   const variants={

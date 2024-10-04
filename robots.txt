@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin/   # Block access to the entire admin directory
+Allow: /admin/public/  # Allow access to a specific public subdirectory within admin
+
+Host: colla8code.vercel.app
+Sitemap: https://colla8code.vercel.app/sitemap.xml

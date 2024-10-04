@@ -39,7 +39,7 @@ const Room = () => {
       socketRef.current = await initSocket();
 
       const handleErrors = (e) => {
-        console.log("socket error", e);
+        // console.log("socket error", e);
         toast.error("Socket connection failed, try again later.");
         reactNavigator("/");
       };
@@ -60,7 +60,7 @@ const Room = () => {
         setClientList(clients);
 
         if (codeRef.current) {
-          console.log(codeRef+" code is going here");
+          // console.log(codeRef+" code is going here");
           socketRef.current.emit(ACTIONS.SYNC_CODE, {
             code: codeRef.current,
             socketId,
@@ -103,7 +103,7 @@ const Room = () => {
     return <Navigate to="/" />;
   }
 
-  console.warn(codeRef)
+  // console.warn(codeRef)
 
   return (
     <div className="room">

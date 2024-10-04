@@ -15,8 +15,6 @@ const server = http.createServer(app);
 
 // Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 // CORS Middleware
 app.use(
   cors({
