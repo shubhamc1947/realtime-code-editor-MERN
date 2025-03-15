@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const { connectDB } = require('./utils/db');
 const socketService = require('./services/socketService');
 const authRoutes = require('./routes/authRoutes');
+const cookieParser = require('cookie-parser'); 
 const cors = require('cors');
 
 dotenv.config();
@@ -15,6 +16,7 @@ const server = http.createServer(app);
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 // CORS Middleware
 app.use(
   cors({

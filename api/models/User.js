@@ -12,6 +12,16 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  refreshTokens: [{
+    token: {
+      type: String,
+      required: true
+    },
+    expiresAt: {
+      type: Date,
+      required: true
+    }
+  }]
 });
 
 const User = mongoose.model('User', UserSchema);
