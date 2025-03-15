@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 const Auth = (props) => {
   const navigate=useNavigate();
   const {authState}=useAuth();
-  console.log(authState)
+  // console.log(authState)
   async function isLogin(){
     if (!authState?.username) {
       navigate('/', { state: { message: 'You need to sign in Before Creating Room'} });

@@ -37,7 +37,7 @@ const OptimizedVideo = () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          console.log("Element is now visible in viewport");
+        //   console.log("Element is now visible in viewport");
           setIsVisible(true);
           observer.unobserve(entry.target);
         }
@@ -58,20 +58,20 @@ const OptimizedVideo = () => {
   // Load video when visible - with explicit error handling and fallbacks
   useEffect(() => {
     if (isVisible && videoRef.current) {
-      console.log("Loading video now that it's visible");
+    //   console.log("Loading video now that it's visible");
       const videoElement = videoRef.current;
       
       // Set poster
       try {
         videoElement.poster = "./demo-thumbnail.jpg";
-        console.log("Poster set successfully");
+        // console.log("Poster set successfully");
       } catch (e) {
         console.error("Error setting poster:", e);
       }
       
       // Event handlers with detailed logging
       const handleCanPlay = () => {
-        console.log("Video can play event triggered");
+        // console.log("Video can play event triggered");
         setIsLoaded(true);
         setShowVideo(true);
       };
@@ -86,7 +86,7 @@ const OptimizedVideo = () => {
       };
       
       const handleLoadedMetadata = () => {
-        console.log("Video metadata loaded");
+        // console.log("Video metadata loaded");
       };
 
       // Add event listeners
@@ -111,14 +111,14 @@ const OptimizedVideo = () => {
         
         // Load the video
         videoElement.load();
-        console.log("Video source set and load() called");
+        // console.log("Video source set and load() called");
         
         // Try to play after a short delay
         setTimeout(() => {
           const playPromise = videoElement.play();
           if (playPromise !== undefined) {
             playPromise.catch(e => {
-              console.log("Autoplay prevented:", e);
+            //   console.log("Autoplay prevented:", e);
               // Show the video anyway even if autoplay fails
               setIsLoaded(true);
               setShowVideo(true);
