@@ -7,6 +7,7 @@ import "./home.scss";
 import { motion } from "framer-motion";
 
 import { ToastContainer, toast } from 'react-toastify';
+import OptimizedVideo from "./Video";
 const Home = () => {
 
   // const [joke, setjoke] = useState("Hello uncle");
@@ -23,7 +24,7 @@ const Home = () => {
   // }, []);
 
   const location = useLocation();
-  console.log(location)
+  // console.log(location)
   useEffect(() => {
     if (location.state?.message) {
       toast.error(location.state.message);
@@ -147,12 +148,13 @@ useEffect(() => {
       </motion.div>
 
       <div className="videocontbg">
-        <motion.div className="videocont">
+        {/* <motion.div className="videocont"> */}
             {/* demo section */}
-            <motion.video variants={otherVariants} initial="initial"  whileInView="animate" autoPlay controls loop  muted playsInline>
+            {/* <motion.video variants={otherVariants} initial="initial"  whileInView="animate" autoPlay controls loop  muted playsInline>
               <motion.source src="./demo.mp4" type="video/mp4" />
             </motion.video>
-        </motion.div>
+        </motion.div> */}
+        <OptimizedVideo/>
       </div>
 
 

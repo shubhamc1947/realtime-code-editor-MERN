@@ -6,7 +6,7 @@ import './Login.scss';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
-  const { loginHandler } = useContext(AuthContext);
+  const { loginHandler,loading } = useContext(AuthContext);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
 
 
@@ -41,7 +41,13 @@ const Login = () => {
           required
           autoComplete="current-password"
         />
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading} style={{ opacity: loading ? 0.5 : 1, pointerEvents: loading ? 'none' : 'auto' }}>
+          {loading ? <div className="loaderwrap" >
+            <div className='loader'>
+            </div>
+          </div> : 'Login'}
+
+        </button>
         <p>Don't have any account? <Link to="/register">Create One</Link></p>
       </form>
     </div>

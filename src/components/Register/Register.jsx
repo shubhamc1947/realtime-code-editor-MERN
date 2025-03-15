@@ -6,7 +6,7 @@ import './Register.scss';
 import { Link } from 'react-router-dom';
 
 const Register = () => {
-  const { registerHandler } = useContext(AuthContext);
+  const { registerHandler,loading } = useContext(AuthContext);
   const [credentials, setCredentials] = useState({ username: '', password: '', confirmPassword: '' });
 
   const handleChange = (e) => {
@@ -52,7 +52,13 @@ const Register = () => {
           required
           autoComplete="new-password"
         />
-        <button type="submit">Register</button>
+         <button type="submit" disabled={loading} style={{ opacity: loading ? 0.5 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}>
+          {loading ? <div className="loaderwrap" >
+            <div className='loader'>
+            </div>
+          </div> : 'Register'}
+
+        </button>
         <p>Already have any account? <Link to="/login">Login here</Link></p>
       </form>
     </div>
