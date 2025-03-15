@@ -2,9 +2,19 @@
 
 https://github.com/user-attachments/assets/8bd27627-7bfc-44af-ba29-b282b8c06e8a
 
+CollabCode is a real-time collaborative coding platform where multiple users can write, edit, and share code simultaneously. Perfect for pair programming, technical interviews, teaching coding concepts, or collaborating with team members remotely.
 
+## Quick Start
 
-Welcome to the Real-Time Code Editor project! This application allows multiple users to collaborate on coding in real-time. Built using the MERN stack (MongoDB, Express, React, Node.js) and WebSockets, it provides a seamless experience for code sharing and editing.
+**Demo Accounts:**
+- Email: chrome@gmail.com | Password: 1234
+- Email: firefox@gmail.com | Password: 1234
+
+**How to use:**
+1. Log in with one of the demo accounts
+2. Create a new room or join an existing one with the room ID
+3. Share the room ID with others to collaborate
+4. Start coding together in real-time!
 
 ## Features
 
@@ -12,6 +22,9 @@ Welcome to the Real-Time Code Editor project! This application allows multiple u
 - **Syntax Highlighting**: Supports syntax highlighting for multiple programming languages using CodeMirror.
 - **Authentication**: Secure user authentication with JWT.
 - **Room Management**: Users can create or join rooms using a room ID.
+- **Multi-Tab Support**: Create multiple code tabs to organize your work.
+- **Language Selection**: Switch between different programming languages.
+- **Theme Options**: Choose from various editor themes for comfortable coding.
 
 ## Installation
 
@@ -104,5 +117,3 @@ Special thanks to all contributors and users of this project.
 ---
 
 Thank you for using the Real-Time Code Editor! Happy coding!
-
-
