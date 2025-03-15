@@ -2,12 +2,14 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 const { connectDB } = require('./utils/db');
 const socketService = require('./services/socketService');
 const authRoutes = require('./routes/authRoutes');
-const cookieParser = require('cookie-parser'); 
 const cors = require('cors');
-
+const { requestLogger } = require('./middleware/loggingMiddleware');
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+const statusRoutes = require('./routes/statusRoutes');
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
@@ -17,7 +19,8 @@ const server = http.createServer(app);
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-// CORS Middleware
+app.use(requestLogger);
+app.use('/api/status', statusRoutes);
 app.use(
   cors({
     origin: process.env.FRONTEND_URL,
@@ -31,6 +34,10 @@ app.use('/api/auth', authRoutes);
 app.get("/", (req, res) => {
   res.send("Code Editor API is working fine");
 });
+
+// Error handling middleware (must be after routes)
+app.use(notFound);
+app.use(errorHandler);
 
 const io = socketIo(server, {
   cors: {

@@ -3,7 +3,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login, register, logout, refreshToken, getUser } from '../utils/api';
-import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 
 const AuthContext = createContext();
@@ -20,12 +19,10 @@ const AuthProvider = ({ children }) => {
 
   // Set up timer to refresh token
   const setupRefreshTimer = () => {
-    // Clear any existing timer
     if (tokenRefreshTimer) {
       clearTimeout(tokenRefreshTimer);
     }
     
-    // Set timer to refresh token 1 minute before it expires (14 minutes after setting)
     const timer = setTimeout(refreshTokenHandler, 14 * 60 * 1000);
     setTokenRefreshTimer(timer);
   };
@@ -34,13 +31,24 @@ const AuthProvider = ({ children }) => {
   const refreshTokenHandler = async () => {
     try {
       await refreshToken();
-      // If successful, set up another timer
       setupRefreshTimer();
     } catch (err) {
       console.error('Token refresh failed:', err);
-      // If refresh fails, log the user out
-      logoutHandler();
+      handleAuthError(err);
+      logoutHandler(false); // Silent logout (don't show success message)
     }
+  };
+
+  // Function to handle authentication errors
+  const handleAuthError = (error) => {
+    const errorMessage = error.message || 'Authentication failed';
+    setAuthState(prev => ({
+      ...prev,
+      loading: false,
+      error: errorMessage
+    }));
+    
+    toast.error(errorMessage);
   };
 
   // Check auth status on mount
@@ -55,45 +63,22 @@ const AuthProvider = ({ children }) => {
             loading: false,
             error: null
           });
-          // Set up refresh timer
           setupRefreshTimer();
         } catch (err) {
-          // Handle token expiration
-          if (err.response?.data?.tokenExpired) {
-            try {
-              await refreshToken();
-              const userData = await getUser();
-              setAuthState({
-                username: userData.user.username,
-                loading: false,
-                error: null
-              });
-              setupRefreshTimer();
-            } catch (refreshErr) {
-              // If refresh fails, clear auth state
-              setAuthState({
-                username: null,
-                loading: false,
-                error: 'Authentication failed'
-              });
-              localStorage.removeItem('username');
-            }
-          } else {
-            // Other errors
-            setAuthState({
-              username: null,
-              loading: false,
-              error: 'Authentication failed'
-            });
-            localStorage.removeItem('username');
-          }
+          // Handle token expiration or other errors
+          console.error('Auth verification failed:', err);
+          setAuthState({
+            username: null,
+            loading: false,
+            error: null // Don't show error on initial load
+          });
+          localStorage.removeItem('username');
         }
       }
     };
 
     verifyAuth();
     
-    // Cleanup function to clear timer
     return () => {
       if (tokenRefreshTimer) {
         clearTimeout(tokenRefreshTimer);
@@ -103,62 +88,47 @@ const AuthProvider = ({ children }) => {
 
   const loginHandler = async (credentials) => {
     try {
-      setAuthState(prev => ({ ...prev, loading: true }));
+      setAuthState(prev => ({ ...prev, loading: true, error: null }));
       const response = await login(credentials);
-      if (response.msg === 'Login successful') {
-        setAuthState({
-          username: credentials.username,
-          loading: false,
-          error: null
-        });
-        localStorage.setItem('username', credentials.username);
-        // Set up refresh timer
-        setupRefreshTimer();
-        reactNavigate('/');
-        toast.success('😍 Login successful');
-      }
-    } catch (err) {
-      setAuthState(prev => ({
-        ...prev,
+      setAuthState({
+        username: credentials.username,
         loading: false,
-        error: err.response?.data?.msg || 'Login failed'
-      }));
-      console.error(err.message);
-      toast.error('Login failed: ' + (err.response?.data?.msg || 'Server error'));
+        error: null
+      });
+      localStorage.setItem('username', credentials.username);
+      setupRefreshTimer();
+      reactNavigate('/');
+      toast.success('Login successful');
+    } catch (err) {
+      handleAuthError(err);
     }
   };
 
   const registerHandler = async (credentials) => {
     try {
-      setAuthState(prev => ({ ...prev, loading: true }));
+      setAuthState(prev => ({ ...prev, loading: true, error: null }));
       const response = await register(credentials);
-      if (response.msg === 'Registration successful') {
-        setAuthState({
-          username: credentials.username,
-          loading: false,
-          error: null
-        });
-        localStorage.setItem('username', credentials.username);
-        // Set up refresh timer
-        setupRefreshTimer();
-        reactNavigate('/');
-        toast.success('😎 Registration successful');
-      }
-    } catch (err) {
-      setAuthState(prev => ({
-        ...prev,
+      setAuthState({
+        username: credentials.username,
         loading: false,
-        error: err.response?.data?.msg || 'Registration failed'
-      }));
-      console.error(err.message);
-      toast.error('Registration failed: ' + (err.response?.data?.msg || 'Server error'));
+        error: null
+      });
+      localStorage.setItem('username', credentials.username);
+      setupRefreshTimer();
+      reactNavigate('/');
+      toast.success('Registration successful');
+    } catch (err) {
+      handleAuthError(err);
     }
   };
 
-  const logoutHandler = async () => {
+  const logoutHandler = async (showSuccessMessage = true) => {
     try {
-      await logout();
-      // Clear timer
+      setAuthState(prev => ({ ...prev, loading: true }));
+      if (showSuccessMessage) {
+        await logout();
+      }
+      
       if (tokenRefreshTimer) {
         clearTimeout(tokenRefreshTimer);
         setTokenRefreshTimer(null);
@@ -169,11 +139,12 @@ const AuthProvider = ({ children }) => {
         error: null
       });
       localStorage.removeItem('username');
-      toast.success("😊 Logout Successfully");
+      if (showSuccessMessage) {
+        toast.success("Logout successful");
+      }
       reactNavigate('/');
     } catch (err) {
-      console.error(err.message);
-      toast.error('Logout failed: ' + (err.response?.data?.msg || 'Server error'));
+      console.error(err);
       // Even if server logout fails, clear local state
       setAuthState({
         username: null,

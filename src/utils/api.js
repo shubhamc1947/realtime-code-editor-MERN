@@ -8,6 +8,31 @@ const api = axios.create({
   withCredentials: true,
 });
 
+// Error handling helper
+const handleApiError = (error) => {
+  let errorMessage = 'An unexpected error occurred';
+  
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    errorMessage = error.response.data?.error?.message || 
+                  error.response.data?.msg || 
+                  `Error ${error.response.status}: ${error.response.statusText}`;
+  } else if (error.request) {
+    // The request was made but no response was received
+    errorMessage = 'No response from server. Please check your internet connection.';
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    errorMessage = error.message;
+  }
+  
+  console.error('API Error:', errorMessage);
+  return Promise.reject({
+    message: errorMessage,
+    originalError: error
+  });
+};
+
 // Add a response interceptor to handle token refresh
 api.interceptors.response.use(
   (response) => response,
@@ -16,7 +41,7 @@ api.interceptors.response.use(
     
     // If the error is due to an expired token and we haven't already tried to refresh
     if (error.response?.status === 401 && 
-        error.response?.data?.tokenExpired && 
+        error.response?.data?.error?.message === 'Access token expired' && 
         !originalRequest._retry) {
       originalRequest._retry = true;
       
@@ -32,7 +57,7 @@ api.interceptors.response.use(
       }
     }
     
-    return Promise.reject(error);
+    return handleApiError(error);
   }
 );
 
@@ -41,8 +66,7 @@ export const login = async (credentials) => {
     const response = await api.post('/api/auth/login', credentials);
     return response.data;
   } catch (error) {
-    console.error('Error during login:', error);
-    throw error;
+    throw handleApiError(error);
   }
 };
 
@@ -51,8 +75,7 @@ export const register = async (credentials) => {
     const response = await api.post('/api/auth/register', credentials);
     return response.data;
   } catch (error) {
-    console.error('Error during registration:', error);
-    throw error;
+    throw handleApiError(error);
   }
 };
 
@@ -61,8 +84,7 @@ export const logout = async () => {
     const response = await api.post('/api/auth/logout');
     return response.data;
   } catch (error) {
-    console.error('Error during logout:', error);
-    throw error;
+    throw handleApiError(error);
   }
 };
 
@@ -71,8 +93,7 @@ export const refreshToken = async () => {
     const response = await api.post('/api/auth/refresh');
     return response.data;
   } catch (error) {
-    console.error('Error refreshing token:', error);
-    throw error;
+    throw handleApiError(error);
   }
 };
 
@@ -81,8 +102,7 @@ export const getUser = async () => {
     const response = await api.get('/api/auth/user');
     return response.data;
   } catch (error) {
-    console.error('Error getting user:', error);
-    throw error;
+    throw handleApiError(error);
   }
 };
 
