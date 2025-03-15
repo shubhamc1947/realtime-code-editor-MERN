@@ -274,3 +274,47 @@
       }
     }
   }
+
+
+  
+.videocontbg {
+  background: rgb(40,44,52);
+  background: linear-gradient(180deg, rgba(40,44,52,1) 0%, rgba(41,45,54,1) 25%, rgba(61,56,79,1) 50%, rgb(185, 148, 228) 100%);
+  
+  .videocont {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+    padding-block: 2rem;
+    
+    video {
+      width: 100%;
+      height: auto;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+    }
+    
+    .video-placeholder {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Make sure the video is responsive on small screens
+@media (max-width: 768px) {
+  .videocontbg .videocont {
+    max-width: 95%;
+    padding: 10px 5px;
+  }
+}

@@ -3,9 +3,11 @@ import { motion } from "framer-motion";
 
 const OptimizedVideo = () => {
   const videoRef = useRef(null);
+  const containerRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
+  const [hasError, setHasError] = useState(false);
   
   // Animation variants
   const otherVariants = {
@@ -28,57 +30,152 @@ const OptimizedVideo = () => {
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: '100px', // Load when within 100px of viewport
+      rootMargin: '200px', // Load when within 200px of viewport
       threshold: 0.1
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
+          console.log("Element is now visible in viewport");
           setIsVisible(true);
           observer.unobserve(entry.target);
         }
       });
     }, options);
 
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
     }
 
     return () => {
-      if (videoRef.current) {
-        observer.unobserve(videoRef.current);
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
       }
     };
   }, []);
 
-  // Load video only when in viewport
+  // Load video when visible - with explicit error handling and fallbacks
   useEffect(() => {
     if (isVisible && videoRef.current) {
-      // Set the src attribute only when visible
+      console.log("Loading video now that it's visible");
       const videoElement = videoRef.current;
       
-      // 1. Use a thumbnail/poster instead of the video initially
-      videoElement.poster = "./demo-thumbnail.jpg"; // Create this thumbnail from your video
+      // Set poster
+      try {
+        videoElement.poster = "./demo-thumbnail.jpg";
+        console.log("Poster set successfully");
+      } catch (e) {
+        console.error("Error setting poster:", e);
+      }
       
-      // 2. Add event listeners for better user feedback
+      // Event handlers with detailed logging
       const handleCanPlay = () => {
+        console.log("Video can play event triggered");
         setIsLoaded(true);
         setShowVideo(true);
       };
+      
+      const handleError = () => {
+        console.error("Video error occurred");
+        if (videoElement.error) {
+          console.error("Error code:", videoElement.error.code);
+          console.error("Error message:", videoElement.error.message);
+        }
+        setHasError(true);
+      };
+      
+      const handleLoadedMetadata = () => {
+        console.log("Video metadata loaded");
+      };
 
+      // Add event listeners
       videoElement.addEventListener('canplay', handleCanPlay);
+      videoElement.addEventListener('error', handleError);
+      videoElement.addEventListener('loadedmetadata', handleLoadedMetadata);
       
-      // 3. Set source to a compressed version first
-      const source = videoElement.querySelector('source');
-      source.src = "./demo-compressed.mp4"; // This should be a lower quality version
-      videoElement.load();
+      // Try different approaches to setting the source
+      try {
+        // First, create the source elements programmatically
+        const sourceMP4 = document.createElement('source');
+        sourceMP4.src = "./demo.mp4";
+        sourceMP4.type = "video/mp4";
+        
+        // Clear any existing sources
+        while (videoElement.firstChild) {
+          videoElement.removeChild(videoElement.firstChild);
+        }
+        
+        // Add the new source
+        videoElement.appendChild(sourceMP4);
+        
+        // Load the video
+        videoElement.load();
+        console.log("Video source set and load() called");
+        
+        // Try to play after a short delay
+        setTimeout(() => {
+          const playPromise = videoElement.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(e => {
+              console.log("Autoplay prevented:", e);
+              // Show the video anyway even if autoplay fails
+              setIsLoaded(true);
+              setShowVideo(true);
+            });
+          }
+        }, 1000);
+      } catch (e) {
+        console.error("Error setting video source:", e);
+        setHasError(true);
+      }
       
+      // Cleanup
       return () => {
         videoElement.removeEventListener('canplay', handleCanPlay);
+        videoElement.removeEventListener('error', handleError);
+        videoElement.removeEventListener('loadedmetadata', handleLoadedMetadata);
       };
     }
   }, [isVisible]);
+
+  // Create a fallback div with a link to the video if loading fails
+  const renderFallback = () => {
+    if (hasError) {
+      return (
+        <div style={{ 
+          backgroundColor: "#282c34", 
+          aspectRatio: "16/9",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          color: "white",
+          flexDirection: "column",
+          padding: "20px",
+          textAlign: "center"
+        }}>
+          <p>Sorry, we couldn't load the video automatically.</p>
+          <a 
+            href="./demo.mp4" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{
+              padding: "10px 15px",
+              backgroundColor: "#71d5b4",
+              color: "white",
+              textDecoration: "none",
+              borderRadius: "4px",
+              marginTop: "15px"
+            }}
+          >
+            Click here to open the video
+          </a>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="videocontbg">
@@ -87,45 +184,53 @@ const OptimizedVideo = () => {
         initial="initial"
         whileInView="animate"
         variants={otherVariants}
+        ref={containerRef}
       >
-        {/* Loading placeholder with thumbnail */}
-        {!showVideo && (
-          <div className="video-placeholder">
-            {/* This can be a static image from your video */}
-            <img 
-              src="./demo-thumbnail.jpg" 
-              alt="Video thumbnail" 
-              style={{ width: '100%', height: 'auto' }}
-            />
-            {isVisible && !isLoaded && (
-              <div className="loading-indicator">
-                <div className="spinner"></div>
-                <p>Loading video...</p>
-              </div>
-            )}
+        {!showVideo && !hasError && (
+          <div className="video-placeholder" style={{ 
+            backgroundColor: "#282c34", 
+            aspectRatio: "16/9",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            color: "white"
+          }}>
+            <div>
+              <div className="spinner" style={{
+                border: "4px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "50%",
+                borderTop: "4px solid #71d5b4",
+                width: "40px",
+                height: "40px",
+                margin: "0 auto 10px auto",
+                animation: "spin 1s linear infinite"
+              }}></div>
+              <p>Loading video...</p>
+            </div>
           </div>
         )}
         
-        {/* Video element */}
-        <motion.video
-          ref={videoRef}
-          autoPlay
-          controls
-          loop
-          muted
-          playsInline
-          style={{ 
-            display: showVideo ? 'block' : 'none',
-            width: '100%',
-            height: 'auto'
-          }}
-          variants={otherVariants}
-          preload="metadata"
-        >
-          <source type="video/mp4" />
-          <source type="video/webm" /> {/* Add WebM as a fallback format */}
-          Your browser does not support the video tag.
-        </motion.video>
+        {hasError && renderFallback()}
+        
+        {!hasError && (
+          <video
+            ref={videoRef}
+            controls
+            muted
+            playsInline
+            preload="metadata"
+            style={{ 
+              display: showVideo ? 'block' : 'none',
+              width: '100%',
+              height: 'auto',
+              borderRadius: '8px'
+            }}
+          >
+            <source src="./demo.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        )}
       </motion.div>
     </div>
   );
