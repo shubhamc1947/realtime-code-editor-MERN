@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { login, register , logout} from '../utils/api';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
+import { findDOMNode } from 'react-dom';
 const AuthContext = createContext();
 export const useAuth=()=>useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
+  const [loading,setLoading]=useState(false);
   const [authState, setAuthState] = useState({
     username: localStorage.getItem('username'),
   });
@@ -23,6 +25,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const loginHandler = async (credentials) => {
+    setLoading(true);
     try {
       // console.log(credentials);
       const response = await login(credentials);
@@ -35,10 +38,13 @@ const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error(err.message);
       toast.error('Login failed: ' + (err.response?.data?.msg || 'Server error'));
+    } finally {
+      setLoading(false);
     }
   };
 
   const registerHandler = async (credentials) => {
+    setLoading(true)
     try {
       const response = await register(credentials);
       if (response.msg === 'Registration successful') {
@@ -50,10 +56,13 @@ const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error(err.message);
       toast.error('Registration failed: ' + (err.response?.data?.msg || 'Server error'))
+    } finally {
+      setLoading(false)
     }
   };
 
   const logoutHandler = async () => {
+    setLoading(true);
     try {
       await logout(); // Call logout API
       setAuthState({ username: null });
@@ -64,13 +73,13 @@ const AuthProvider = ({ children }) => {
     } catch (err) { 
       console.error(err.message);
       toast.error('Logout failed: ' + err.response?.data?.msg || 'Server error')
-
-
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ authState, loginHandler, registerHandler, logoutHandler }}>
+    <AuthContext.Provider value={{ authState, loginHandler, registerHandler, logoutHandler,loading }}>
       {children}
     </AuthContext.Provider>
   );

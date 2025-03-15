@@ -8,7 +8,7 @@ import "./NavBar.scss";
 import { motion } from "framer-motion"
 
 const NavBar = () => {
-  const { authState, logoutHandler } = useContext(AuthContext);
+  const { authState, logoutHandler ,loading} = useContext(AuthContext);
   // console.log(authState);
 
   //framer motion varient
@@ -31,7 +31,7 @@ const NavBar = () => {
       <Link to="/"><h1>CollabCode<span>.</span></h1></Link>
       {authState.username ? (
         <>
-          <button onClick={logoutHandler}>Logout</button>
+          <button onClick={logoutHandler} disabled={loading} style={{ opacity: loading ? 0.5 : 1, pointerEvents: loading ? 'none' : 'auto' }} >Logout</button>
         </>
       ) : (
         <>
